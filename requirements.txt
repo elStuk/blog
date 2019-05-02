@@ -1,0 +1,4 @@
+django==2.2
+pytz==2.2
+sqlparse==0.3.0
+pip
