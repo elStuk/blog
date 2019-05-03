@@ -28,6 +28,7 @@ router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'posts', views.PostViewSet)
+router.register(r'likes', views.PostLikeView)
 # router.register(r'votes', views.VotingViewSet)
 
 urlpatterns = [
@@ -38,9 +39,13 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     # DJANGO REST
     path('api/', include(router.urls), name='get_post'),
+<<<<<<< HEAD
     # MAIN BLOG
     path('', include('blog.urls')),
 
+=======
+    path('', include('blog.urls'))
+>>>>>>> 3d5e05215b47f46b2511a95c62b12484b75080be
 ]
 
 if settings.DEBUG:

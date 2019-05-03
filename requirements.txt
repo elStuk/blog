@@ -1,5 +1,9 @@
 django==2.2.1
+<<<<<<< HEAD
 pytz==2.2
+=======
+ppytz==2.2
+>>>>>>> 3d5e05215b47f46b2511a95c62b12484b75080be
 sqlparse==0.3.0
 pip==19.0.3
 pillow==6.0.0
