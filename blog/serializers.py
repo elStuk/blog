@@ -2,6 +2,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from blog.models import Post
 
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
@@ -18,4 +19,10 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Post
         fields = ('title', 'content', 'date_posted', 'author')
+
+
+class LikeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
 
