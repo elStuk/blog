@@ -5,12 +5,13 @@ from django.views.generic import (ListView, DetailView,
                                   DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
-from django.http import JsonResponse
+from django.http import JsonResponse, request
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
-from blog.models import Post
+from blog.models import Post, Like
 from .serializers import UserSerializer, GroupSerializer, PostSerializer
 from rest_framework.renderers import JSONRenderer
+from django.shortcuts import redirect
 
 
 def home(request):
@@ -112,3 +113,36 @@ class GroupViewSet(viewsets.ModelViewSet):
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+
+def PostLikeView(request, pk):
+    # post = Post.objects.get(pk=)
+    # user = User.objects.get(pk=)
+    post_id = request.POST.get('post_id', None)
+    user_id = request.POST.get('user_id', None)
+    print(post_id)
+    print(user_id)
+    post_instance = Post.objects.get(id=post_id)
+    user_instance = User.objects.get(id=user_id)
+
+    if post_id and user_id:
+        like = Like(like_status=True, post=post_instance, user=user_instance)
+        like.save()
+
+    return redirect('/post/' + str(post_id))
+
+def PostDislikeView(request, pk):
+    # post = Post.objects.get(pk=)
+    # user = User.objects.get(pk=)
+    post_id = request.POST.get('post_id', None)
+    user_id = request.POST.get('user_id', None)
+    print(post_id)
+    print(user_id)
+    post_instance = Post.objects.get(id=post_id)
+    user_instance = User.objects.get(id=user_id)
+
+    if post_id and user_id:
+        like = Like(like_status=False, post=post_instance, user=user_instance)
+        like.save()
+
+    return redirect('/post/' + str(post_id))

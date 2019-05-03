@@ -37,12 +37,7 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('api/', include(router.urls), name='get_post'),
-    path('', include('blog.urls')),
-<<<<<<< HEAD
-
-=======
->>>>>>> 4b7ba36d0f922cee819b14df8fd59d1cfed372e2
-
+    path('', include('blog.urls'))
 ]
 
 if settings.DEBUG:
