@@ -42,6 +42,12 @@ urlpatterns = [
 
     # MAIN BLOG
     path('', include('blog.urls')),
+<<<<<<< HEAD
+=======
+
+    path('', include('blog.urls'))
+
+>>>>>>> 23ab575128eb3c4a4507688c23f3f3f136e4723a
 ]
 
 if settings.DEBUG:
