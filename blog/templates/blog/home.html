@@ -11,8 +11,14 @@
                 </div>
                 <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
                 <p class="article-content">{{ post.content }}</p>
+                {#                likes/dislikes                    #}
                 <hr>
-
+                <a href="#" id="like"><i class="material-icons"
+                                         style="font-size:20px;color:darkgreen">thumb_up</i></a>
+                <span id="liked">0</span>
+                <a href="#" id="dislike"><i class="material-icons"
+                                            style="font-size:20px;padding-left: 25px;color:red">thumb_down</i></a>
+                <span id="disliked">0</span>
                 <hr>
             </div>
 
