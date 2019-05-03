@@ -1,7 +1,17 @@
 {% extends "blog/base.html" %}
 
 {% block content %}
-    <h1 class="mb-3">Post by {{ view.kwarks.username }} ({{ page_obj.paginator.count }})</h1>
+    <h1 class="mb-3">Posts by {{ user.username }} ({{ page_obj.paginator.count }})</h1>
+
+    <h2>Likes:{{ likes }}</h2>
+    <h2>Dislikes:{{ dislikes }}</h2>
+    {% for nrOflikes in postLike %}
+        <p>{{ nrOflikes }}</p>
+    {% endfor %}
+    <p>-------</p>
+    {% for nrOflikes in postDislike %}
+        <p>{{ nrOflikes }}</p>
+    {% endfor %}
     {% for post in posts %}
         <article class="media content-section">
             <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
