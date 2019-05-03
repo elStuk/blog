@@ -9,6 +9,11 @@ verify_ssl = true
 django = "*"
 snippets = "*"
 django-serializers = "*"
+<<<<<<< HEAD
+post = "*"
+=======
+djangorestframework = "*"
+>>>>>>> 3d5e05215b47f46b2511a95c62b12484b75080be
 
 [requires]
 python_version = "3.7"

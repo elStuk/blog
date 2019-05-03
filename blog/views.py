@@ -1,16 +1,21 @@
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, get_object_or_404
+from rest_framework.response import Response
+
 from .models import Post
 from django.views.generic import (ListView, DetailView,
                                   CreateView, UpdateView,
                                   DeleteView)
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
-from django.http import JsonResponse
+from django.http import JsonResponse, request
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
-from blog.models import Post
-from .serializers import UserSerializer, GroupSerializer, PostSerializer
+from rest_framework.views import APIView
+from blog.models import Post, Like
+from .serializers import UserSerializer, GroupSerializer, PostSerializer, LikeSerializer
 from rest_framework.renderers import JSONRenderer
+from django.shortcuts import redirect
 
 
 def home(request):
@@ -28,22 +33,55 @@ class PostListView(ListView):
     paginate_by = 5
 
 
-class UserPostListView(ListView):
-    model = Post
-    template_name = 'blog/user_posts.html'  # <app>/<model>_<viewtype>.html
-    context_object_name = 'posts'
-    paginate_by = 5
-
-    def get_queryset(self):
-        user = get_object_or_404(User, username=self.kwargs.get('username'))
-        return Post.objects.filter(author=user).order_by('-date_posted')
-
-
-class PostDetailView(DetailView):
-    model = Post
+# class UserPostListView(ListView):
+#     model = Post
+#     template_name = 'blog/user_posts.html'  # <app>/<model>_<viewtype>.html
+#     context_object_name = 'posts'
+#     paginate_by = 5
+#
+#     def get_queryset(self):
+#         user = get_object_or_404(User, username=self.kwargs.get('username'))
+#         return Post.objects.filter(author=user).order_by('-date_posted')
 
 
-# update view
+def UserPostListViewFnc(request, username):
+    user = get_object_or_404(User, username=username)
+    postsUser = Post.objects.filter(author=user).order_by('-date_posted')
+    PostLike = []
+    for onePost in postsUser:
+        nrOfLIkes = Like.objects.filter(user=user, post=onePost, like_status=True).count()
+        PostLike.append(nrOfLIkes)
+    PostDislike = []
+    for onePost in postsUser:
+        nrOfLIkes = Like.objects.filter(user=user, post=onePost, like_status=False).count()
+        PostDislike.append(nrOfLIkes)
+    context = {
+        'posts': postsUser,
+        'likes': Like.objects.filter(user=user, like_status=True).count(),
+        'dislikes': Like.objects.filter(user=user, like_status=False).count(),
+        'postLike': PostLike,
+        'postDislike': PostDislike
+    }
+    return render(request, 'blog/user_posts.html', context=context)
+
+
+# class PostDetailView(DetailView):
+#     model = Post
+
+
+def PostDetailViewFnc(request, pk):
+    post = Post.objects.filter(pk=pk)[0]
+    likes = Like.objects.filter(post=post, like_status=True).count()
+    dislikes = Like.objects.filter(post=post, like_status=False).count()
+
+    context = {
+        'post': post,
+        'likes': likes,
+        'dislikes': dislikes
+    }
+    return render(request, 'blog/post_detail.html', context=context)
+
+
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     fields = ['title', 'content']
@@ -51,7 +89,6 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-    # update viwe
 
 
 # update viwe
@@ -112,3 +149,34 @@ class GroupViewSet(viewsets.ModelViewSet):
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+
+
+def PostPutLikeView(request, pk, username):
+    post_instance = Post.objects.get(id=pk)
+    user_instance = User.objects.get(username=username)
+
+    if not Like.objects.filter(like_status=True, post=post_instance, user=user_instance).exists() \
+            and not Like.objects.filter(like_status=False, post=post_instance, user=user_instance).exists():
+        like = Like(like_status=True, post=post_instance, user=user_instance)
+        like.save()
+
+    return redirect('/post/' + str(post_instance.id))
+
+
+def PostPutDislikeView(request, pk, username):
+    post_instance = Post.objects.get(id=pk)
+    user_instance = User.objects.get(username=username)
+
+    if not Like.objects.filter(like_status=True, post=post_instance, user=user_instance).exists() \
+            and not Like.objects.filter(like_status=False, post=post_instance, user=user_instance).exists():
+        like = Like(like_status=False, post=post_instance, user=user_instance)
+        like.save()
+
+    return redirect('/post/' + str(post_instance.id))
+
+
+class PostLikeView(viewsets.ModelViewSet):
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+
