@@ -18,29 +18,29 @@
             <p class="article-content">{{ post.content }}</p>
             <hr>
             {% if user.is_authenticated %}
-                <form method="post" action="/post/{{ post.id }}/like/{{ user.username }}">
-                    {% csrf_token %}
-                    <button type="submit" style="border: 0; background-color: transparent">
-                        <i class="material-icons" style="font-size:20px;color:darkgreen">thumb_up</i>
-                        <span id="liked">{{ likes }}</span>
-                    </button>
-                </form>
-                <form method="post" action="/post/{{ post.id }}/dislike/{{ user.username }}">
+                <form method="post" action="/post/{{ post.id }}/dislike/{{ user.username }}" style="display: inline-block;width: min-content;min-width: 76px;float: right;">
                     {% csrf_token %}
                     <button type="submit" style="border: 0; background-color: transparent">
                         <i class="material-icons" style="font-size:20px;color:red">thumb_down</i>
-                        <span id="liked">{{ dislikes }}</span>
+                        <span id="liked" style="position: relative;top: -3px;color:red">{{ dislikes }}</span>
+                    </button>
+                </form>
+                <form method="post" action="/post/{{ post.id }}/like/{{ user.username }}" style="display: inline-block;width: min-content;min-width: 76px;float: right;">
+                    {% csrf_token %}
+                    <button type="submit" style="border: 0; background-color: transparent">
+                        <i class="material-icons" style="font-size:20px;color:darkgreen">thumb_up</i>
+                        <span id="liked" style="position: relative;top: -3px;color: darkgreen">{{ likes }}</span>
                     </button>
                 </form>
             {% endif %}
             {% if not user.is_authenticated %}
-                <div>
-                    <i class="material-icons" style="font-size:20px;color:darkgreen">thumb_up</i>
-                    <span id="liked">{{ likes }}</span>
-                </div>
-                <div>
+                <div style="display: inline-block;width: min-content;min-width: 76px;float: right;">
                     <i class="material-icons" style="font-size:20px;color:red">thumb_down</i>
-                    <span id="liked">{{ dislikes }}</span>
+                    <span id="liked" style="position: relative;top: -3px;color:red">{{ dislikes }}</span>
+                </div>
+                <div style="display: inline-block;width: min-content;min-width: 76px;float: right;">
+                    <i class="material-icons" style="font-size:20px;color:darkgreen">thumb_up</i>
+                    <span id="liked" style="position: relative;top: -3px;color: darkgreen">{{ likes }}</span>
                 </div>
             {% endif %}
 

@@ -1,17 +1,16 @@
 {% extends "blog/base.html" %}
 
 {% block content %}
-    <h1 class="mb-3">Posts by {{ user.username }} ({{ page_obj.paginator.count }})</h1>
+    <div style="text-align:center;">
+        <h1 class="mb-3">Posts by {{ username }}</h1>
+    </div>
 
-    <h2>Likes:{{ likes }}</h2>
-    <h2>Dislikes:{{ dislikes }}</h2>
-    {% for nrOflikes in postLike %}
-        <p>{{ nrOflikes }}</p>
-    {% endfor %}
-    <p>-------</p>
-    {% for nrOflikes in postDislike %}
-        <p>{{ nrOflikes }}</p>
-    {% endfor %}
+    <h3>Statistics:</h3>
+    <h4>Likes:{{ likes }}</h4>
+    <h4>Dislikes:{{ dislikes }}</h4>
+    <br>
+
+
     {% for post in posts %}
         <article class="media content-section">
             <img class="rounded-circle article-img" src="{{ post.author.profile.image.url }}">
@@ -22,6 +21,31 @@
                 </div>
                 <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
                 <p class="article-content">{{ post.content }}</p>
+                <div style="display: inline-block;float: right;margin-left: 10px">
+                    <p style="font-size:20px;color:red;display: inline-block">
+                        Dislikes:
+                    </p>
+                    <span id="liked" style="font-size:20px;color:red;display: inline-block">
+                        {% for key, value in dislikesDict.items %}
+                            {% if key == post.id %}
+                                {{ value }}
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                </div>
+                <div style="display: inline-block;float: right;">
+                    <p style="font-size:20px;color:darkgreen;display: inline-block">
+                        Likes:
+                    </p>
+                    <span id="liked" style="font-size:20px;color:darkgreen;display: inline-block">
+                        {% for key, value in likesDict.items %}
+                            {% if key == post.id %}
+                                {{ value }}
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                </div>
+
             </div>
         </article>
     {% endfor %}
