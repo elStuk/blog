@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, get_object_or_404
 from .models import Post
 from django.views.generic import (ListView, DetailView,
@@ -113,5 +114,4 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-
-# like/dislike
+# likes method

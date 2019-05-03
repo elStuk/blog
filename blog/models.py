@@ -1,5 +1,6 @@
 from django.conf import settings
-from django.conf.global_settings import AUTH_USER_MODEL
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
