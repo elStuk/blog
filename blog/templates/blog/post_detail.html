@@ -14,51 +14,39 @@
                     </div>
                 {% endif %}
             </div>
-<<<<<<< HEAD
             <h2 class="article-title">{{ object.title }}</h2>
             <p class="article-content">{{ object.content }}</p>
-                        <hr>
-            {#        likes/dislikes#}
-            {#            <a href="#" id="like"><i class="material-icons"#}
-            {#                                     style="font-size:20px;color:darkgreen">thumb_up</i></a>#}
-            {#            <span id="liked">0</span>#}
-            {#            <a href="#" id="dislike"><i class="material-icons"#}
-            {#                                        style="font-size:20px;padding-left: 25px;color:red">thumb_down</i></a>#}
-            {#            <span id="disliked">0</span>#}
-
             <hr>
-=======
+            <hr>
             <h2 class="article-title">{{ post.title }}</h2>
             <p class="article-content">{{ post.content }}</p>
             <hr>
+            {#        LIKE FORMS        #}
             {% if user.is_authenticated %}
                 <form method="post" action="/post/{{ post.id }}/like/{{ user.username }}">
                     {% csrf_token %}
-                    <button type="submit" style="border: 0; background-color: transparent">
-                        <i class="material-icons" style="font-size:20px;color:darkgreen">thumb_up</i>
-                        <span id="liked">{{ likes }}</span>
+                    <button type="submit" style="border: 0; background-color: transparent;float:left">
+                        <i class="material-icons" style="font-size:20px;color:darkgreen;">thumb_up</i>
+                        <span id="liked" style="font-size:25px;">{{ likes }}</span>
                     </button>
                 </form>
                 <form method="post" action="/post/{{ post.id }}/dislike/{{ user.username }}">
                     {% csrf_token %}
-                    <button type="submit" style="border: 0; background-color: transparent">
+                    <button type="submit" style="border: 0; background-color: transparent;float:right">
                         <i class="material-icons" style="font-size:20px;color:red">thumb_down</i>
-                        <span id="liked">{{ dislikes }}</span>
+                        <span id="liked" style="font-size:25px;">{{ dislikes }}</span>
                     </button>
                 </form>
-            {% endif %}
-            {% if not user.is_authenticated %}
+            {% else %}
                 <div>
                     <i class="material-icons" style="font-size:20px;color:darkgreen">thumb_up</i>
-                    <span id="liked">{{ likes }}</span>
+                    <span id="liked" style="font-size:25px;">{{ likes }}</span>
                 </div>
                 <div>
-                    <i class="material-icons" style="font-size:20px;color:red">thumb_down</i>
-                    <span id="liked">{{ dislikes }}</span>
+                    <i class="material-icons" style="font-size:15px;color:red">thumb_down</i>
+                    <span id="liked" style="font-size:25px;">{{ dislikes }}</span>
                 </div>
             {% endif %}
->>>>>>> 3d5e05215b47f46b2511a95c62b12484b75080be
-
         </div>
     </article>
 

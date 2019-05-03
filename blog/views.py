@@ -150,9 +150,7 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-<<<<<<< HEAD
-# likes method
-=======
+
 
 def PostPutLikeView(request, pk, username):
     post_instance = Post.objects.get(id=pk)
@@ -181,4 +179,4 @@ def PostPutDislikeView(request, pk, username):
 class PostLikeView(viewsets.ModelViewSet):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
->>>>>>> 3d5e05215b47f46b2511a95c62b12484b75080be
+

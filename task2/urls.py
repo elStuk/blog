@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-
+from django.urls import reverse
 from blog import views
 from users import views as user_views
 from django.contrib.auth import views as auth_views
@@ -39,13 +39,12 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     # DJANGO REST
     path('api/', include(router.urls), name='get_post'),
-<<<<<<< HEAD
+
     # MAIN BLOG
     path('', include('blog.urls')),
 
-=======
     path('', include('blog.urls'))
->>>>>>> 3d5e05215b47f46b2511a95c62b12484b75080be
+
 ]
 
 if settings.DEBUG:
