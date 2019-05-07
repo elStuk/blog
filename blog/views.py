@@ -10,14 +10,11 @@ from django.contrib.auth.models import User
 from django.http import JsonResponse, request
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
-<<<<<<< HEAD
 from blog.models import Post, Like
 from .serializers import UserSerializer, GroupSerializer, PostSerializer
-=======
 from rest_framework.views import APIView
 from blog.models import Post, Like
 from .serializers import UserSerializer, GroupSerializer, PostSerializer, LikeSerializer
->>>>>>> 1273c3fe2dcbd1f921a87372a08bf8e4f63afa7a
 from rest_framework.renderers import JSONRenderer
 from django.shortcuts import redirect
 
@@ -180,7 +177,6 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
 
 
-<<<<<<< HEAD
 def PostLikeView(request, pk):
     # post = Post.objects.get(pk=)
     # user = User.objects.get(pk=)
@@ -212,7 +208,6 @@ def PostDislikeView(request, pk):
         like.save()
 
     return redirect('/post/' + str(post_id))
-=======
 def PostPutLikeView(request, pk, username):
     post_instance = Post.objects.get(id=pk)
     user_instance = User.objects.get(username=username)
@@ -240,4 +235,3 @@ def PostPutDislikeView(request, pk, username):
 class PostLikeView(viewsets.ModelViewSet):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
->>>>>>> 1273c3fe2dcbd1f921a87372a08bf8e4f63afa7a

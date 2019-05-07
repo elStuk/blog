@@ -1,13 +1,7 @@
 django==2.2.1
-<<<<<<< HEAD
 ppytz==2.2
-=======
-<<<<<<< HEAD
 ppytz==2.2
-=======
->>>>>>> 1273c3fe2dcbd1f921a87372a08bf8e4f63afa7a
 pytz==2.2
->>>>>>> 1ed810a22919bcc8f447a04fdac07264cd37bdf4
 sqlparse==0.3.0
 pip==19.0.3
 pillow==6.0.0
