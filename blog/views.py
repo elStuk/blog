@@ -179,7 +179,12 @@ def PostPutLikeView(request, pk, username):
     post_instance = Post.objects.get(id=pk)
     user_instance = User.objects.get(username=username)
 
-    if not Like.objects.filter(like_status=True, post=post_instance, user=user_instance).exists() \
+    if Like.objects.filter(like_status=False, post=post_instance, user=user_instance).exists():
+        Like.objects.filter(like_status=False, post=post_instance, user=user_instance).delete()
+
+    if Like.objects.filter(like_status=True, post=post_instance, user=user_instance).exists():
+        Like.objects.filter(like_status=True, post=post_instance, user=user_instance).delete()
+    elif not Like.objects.filter(like_status=True, post=post_instance, user=user_instance).exists() \
             and not Like.objects.filter(like_status=False, post=post_instance, user=user_instance).exists():
         like = Like(like_status=True, post=post_instance, user=user_instance)
         like.save()
@@ -191,12 +196,18 @@ def PostPutDislikeView(request, pk, username):
     post_instance = Post.objects.get(id=pk)
     user_instance = User.objects.get(username=username)
 
-    if not Like.objects.filter(like_status=True, post=post_instance, user=user_instance).exists() \
+    if Like.objects.filter(like_status=True, post=post_instance, user=user_instance).exists():
+        Like.objects.filter(like_status=True, post=post_instance, user=user_instance).delete()
+
+    if Like.objects.filter(like_status=False, post=post_instance, user=user_instance).exists():
+        Like.objects.filter(like_status=False, post=post_instance, user=user_instance).delete()
+    elif not Like.objects.filter(like_status=True, post=post_instance, user=user_instance).exists() \
             and not Like.objects.filter(like_status=False, post=post_instance, user=user_instance).exists():
         like = Like(like_status=False, post=post_instance, user=user_instance)
         like.save()
 
     return redirect('/post/' + str(post_instance.id))
+
 
 
 class PostLikeView(viewsets.ModelViewSet):
