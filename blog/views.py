@@ -1,4 +1,3 @@
-from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, get_object_or_404
 from rest_framework.response import Response
 
@@ -25,12 +24,33 @@ def home(request):
     return render(request, 'blog/home.html', context)
 
 
-class PostListView(ListView):
-    model = Post
-    template_name = 'blog/home.html'  # <app>/<model>_<viewtype>.html
-    context_object_name = 'posts'
-    ordering = ['-date_posted']
-    paginate_by = 5
+# class PostListView(ListView):
+#     model = Post
+#     template_name = 'blog/home.html'  # <app>/<model>_<viewtype>.html
+#     context_object_name = 'posts'
+#     ordering = ['-date_posted']
+#     paginate_by = 5
+
+def PostListViewFnc(request):
+    user = User.objects.all()
+    postsUser = Post.objects.order_by('-date_posted')
+
+    likesDict = {}
+    for onePost in postsUser:
+        nrOfLIkes = Like.objects.filter(post=onePost, like_status=True).count()
+        likesDict.update({onePost.id: nrOfLIkes})
+
+    dislikesDict = {}
+    for onePost in postsUser:
+        nrOfLIkes = Like.objects.filter(post=onePost, like_status=False).count()
+        dislikesDict.update({onePost.id: nrOfLIkes})
+
+    context = {
+        'posts': postsUser,
+        'likesDict': likesDict,
+        'dislikesDict': dislikesDict
+    }
+    return render(request, 'blog/home.html', context=context)
 
 
 # class UserPostListView(ListView):
@@ -47,20 +67,24 @@ class PostListView(ListView):
 def UserPostListViewFnc(request, username):
     user = get_object_or_404(User, username=username)
     postsUser = Post.objects.filter(author=user).order_by('-date_posted')
-    PostLike = []
+
+    likesDict = {}
     for onePost in postsUser:
-        nrOfLIkes = Like.objects.filter(user=user, post=onePost, like_status=True).count()
-        PostLike.append(nrOfLIkes)
-    PostDislike = []
+        nrOfLIkes = Like.objects.filter(post=onePost, like_status=True).count()
+        likesDict.update({onePost.id: nrOfLIkes})
+
+    dislikesDict = {}
     for onePost in postsUser:
-        nrOfLIkes = Like.objects.filter(user=user, post=onePost, like_status=False).count()
-        PostDislike.append(nrOfLIkes)
+        nrOfLIkes = Like.objects.filter(post=onePost, like_status=False).count()
+        dislikesDict.update({onePost.id: nrOfLIkes})
+
     context = {
         'posts': postsUser,
         'likes': Like.objects.filter(user=user, like_status=True).count(),
         'dislikes': Like.objects.filter(user=user, like_status=False).count(),
-        'postLike': PostLike,
-        'postDislike': PostDislike
+        'likesDict': likesDict,
+        'dislikesDict': dislikesDict,
+        'username': username
     }
     return render(request, 'blog/user_posts.html', context=context)
 
@@ -151,7 +175,6 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
 
 
-
 def PostPutLikeView(request, pk, username):
     post_instance = Post.objects.get(id=pk)
     user_instance = User.objects.get(username=username)
@@ -179,4 +202,3 @@ def PostPutDislikeView(request, pk, username):
 class PostLikeView(viewsets.ModelViewSet):
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
-
